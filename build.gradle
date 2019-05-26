@@ -20,5 +20,6 @@ dependencies {
 	implementation 'org.webjars:jquery:2.1.1'
 	implementation 'org.webjars:bootstrap:3.2.0'
 	implementation 'org.webjars:webjars-locator-core'
+	implementation 'org.webjars:js-cookie:2.1.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
