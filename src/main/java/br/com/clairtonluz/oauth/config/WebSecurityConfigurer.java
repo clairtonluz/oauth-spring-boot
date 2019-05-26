@@ -15,9 +15,11 @@ import javax.servlet.Filter;
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private final Filter ssoFacebookFilter;
+    private final Filter ssoGithubFilter;
 
-    public WebSecurityConfigurer(@Qualifier("ssoFacebookFilter") Filter ssoFacebookFilter) {
+    public WebSecurityConfigurer(Filter ssoFacebookFilter, Filter ssoGithubFilter) {
         this.ssoFacebookFilter = ssoFacebookFilter;
+        this.ssoGithubFilter = ssoGithubFilter;
     }
 
     @Override
@@ -31,7 +33,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and().logout().logoutSuccessUrl("/").permitAll()
                 .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and().addFilterBefore(ssoFacebookFilter, BasicAuthenticationFilter.class);
+                .and().addFilterBefore(ssoFacebookFilter, BasicAuthenticationFilter.class)
+                .addFilterBefore(ssoGithubFilter, BasicAuthenticationFilter.class)
+        ;
     }
 
 }
