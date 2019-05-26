@@ -1,0 +1,24 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.5.RELEASE'
+	id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'br.com.clairtonluz'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.0.RELEASE'
+	implementation 'org.webjars:jquery:2.1.1'
+	implementation 'org.webjars:bootstrap:3.2.0'
+	implementation 'org.webjars:webjars-locator-core'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
