@@ -16,19 +16,11 @@ import org.springframework.security.oauth2.client.token.grant.code.Authorization
 import javax.servlet.Filter;
 
 @Configuration
-public class OAuthGithub {
+public class OAuthGithub extends OAuthAbstract {
 
-    @Bean
+    @Bean("ssoGithubFilter")
     public Filter ssoGithubFilter(@Qualifier("oauth2ClientContext") OAuth2ClientContext oauth2ClientContext) {
-        OAuth2ClientAuthenticationProcessingFilter githubFilter =
-                new OAuth2ClientAuthenticationProcessingFilter("/login/github");
-        OAuth2RestTemplate githubTemplate = new OAuth2RestTemplate(github(), oauth2ClientContext);
-        githubFilter.setRestTemplate(githubTemplate);
-        UserInfoTokenServices tokenServices = new UserInfoTokenServices(githubResource().getUserInfoUri(),
-                github().getClientId());
-        tokenServices.setRestTemplate(githubTemplate);
-        githubFilter.setTokenServices(tokenServices);
-        return githubFilter;
+        return ssoFilter(oauth2ClientContext, "/login/github", github(), githubResource());
     }
 
     @Bean
@@ -43,11 +35,4 @@ public class OAuthGithub {
         return new ResourceServerProperties();
     }
 
-    @Bean
-    public FilterRegistrationBean<OAuth2ClientContextFilter> oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
-        FilterRegistrationBean<OAuth2ClientContextFilter> registration = new FilterRegistrationBean<>();
-        registration.setFilter(filter);
-        registration.setOrder(-100);
-        return registration;
-    }
 }
