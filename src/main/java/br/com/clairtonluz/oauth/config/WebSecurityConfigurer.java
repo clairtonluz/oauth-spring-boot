@@ -1,14 +1,25 @@
 package br.com.clairtonluz.oauth.config;
 
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import javax.servlet.Filter;
+
 @Configuration
-@EnableOAuth2Sso
+@EnableOAuth2Client
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
+
+    private final Filter ssoFacebookFilter;
+
+    public WebSecurityConfigurer(@Qualifier("ssoFacebookFilter") Filter ssoFacebookFilter) {
+        this.ssoFacebookFilter = ssoFacebookFilter;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -19,6 +30,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and().logout().logoutSuccessUrl("/").permitAll()
-                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());;
+                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and().addFilterBefore(ssoFacebookFilter, BasicAuthenticationFilter.class);
     }
+
 }
